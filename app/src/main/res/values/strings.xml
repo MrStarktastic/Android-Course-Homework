@@ -26,4 +26,20 @@
         <item>Camel</item>
         <item>Australia</item>
     </string-array>
+
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+
+    <string name="answer_edit_hint">Answer</string>
+
+    <string name="action_title_check_answers">Check answers</string>
+
+    <string name="correct_answers">correct answers</string>
+
+    <string name="result_excellent">Excellent!</string>
+    <string name="result_good">Good</string>
+    <string name="result_mediocre">Mediocre</string>
+    <string name="result_bad">Go read a book</string>
+
+    <string name="try_again">Try again</string>
 </resources>

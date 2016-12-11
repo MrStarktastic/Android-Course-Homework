@@ -26,4 +26,20 @@
         <item>גמל</item>
         <item>אוסטרליה</item>
     </string-array>
+
+    <string name="previous">הקודם</string>
+    <string name="next">הבא</string>
+
+    <string name="answer_edit_hint">תשובה</string>
+
+    <string name="action_title_check_answers">בדוק תשובות</string>
+
+    <string name="correct_answers">תשובות נכונות</string>
+
+    <string name="result_excellent">מעולה!</string>
+    <string name="result_good">טוב</string>
+    <string name="result_mediocre">בינוני</string>
+    <string name="result_bad">לך לקרוא ספר</string>
+
+    <string name="try_again">נסה שוב</string>
 </resources>
