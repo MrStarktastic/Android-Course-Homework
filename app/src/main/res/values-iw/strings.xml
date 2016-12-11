@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Ex3</string>
+
+    <string-array name="questions">
+        <item>באיזה יצור ימי ניתן למצוא פנינים טבעיות?</item>
+        <item>באיזו יבשת יונת הדואר (שנכחדה) הייתה מצוייה?</item>
+        <item>מיהו הדג המהיר ביותר באוקיינוס?</item>
+        <item>לאיזו חיה יש הכי הרבה רגליים?</item>
+        <item>מיהו הנחש היבשתי המהיר ביותר בעולם?</item>
+        <item>לפי שמועות רווחות אך לא נכונות, איזו חיה קוברת את ראשה באדמה כאשר היא מרגישה מאויימת?</item>
+        <item>איזו חיה היא בעלת המטבלוזים המהיר ביותר?</item>
+        <item>באיזו יבשת לא ניתן למצוא דבורים?</item>
+        <item>איזו חיה ידועה בשם ספינת המדבר?</item>
+        <item>באיזו ארץ מצוי הפלטיפוס?</item>
+    </string-array>
+
+    <string-array name="answers">
+        <item>צדפה</item>
+        <item>אמריקה הצפונית</item>
+        <item>מפרשן</item>
+        <item>מרבה רגליים</item>
+        <item>ממבה שחורה</item>
+        <item>יען</item>
+        <item>צופית</item>
+        <item>אנטרקטיקה</item>
+        <item>גמל</item>
+        <item>אוסטרליה</item>
+    </string-array>
+</resources>

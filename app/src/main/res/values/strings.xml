@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Ex3</string>
+
+    <string-array name="questions">
+        <item>Natural pearls are found in what sea creature?</item>
+        <item>The Passenger Pigeon, now extinct, was endemic to which continent?</item>
+        <item>What is the fastest fish in the Ocean?</item>
+        <item>Which animal has the most legs?</item>
+        <item>What is the fastest land snake in the world?</item>
+        <item>Which animal was incorrectly rumored to bury its head in the sand when frightened?</item>
+        <item>What animal has the fastest metabolism?</item>
+        <item>On what continent would you not find bees?</item>
+        <item>What type of animal is known as the ship of the desert?</item>
+        <item>The platypus is native to what country?</item>
+    </string-array>
+
+    <string-array name="answers">
+        <item>Oyster</item>
+        <item>North America</item>
+        <item>Sailfish</item>
+        <item>Millipede</item>
+        <item>Black Mamba</item>
+        <item>Ostrich</item>
+        <item>Hummingbird</item>
+        <item>Antarctica</item>
+        <item>Camel</item>
+        <item>Australia</item>
+    </string-array>
+</resources>
