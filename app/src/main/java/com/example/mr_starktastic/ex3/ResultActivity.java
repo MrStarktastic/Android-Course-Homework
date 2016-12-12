@@ -1,7 +1,9 @@
 package com.example.mr_starktastic.ex3;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -42,11 +44,20 @@ public class ResultActivity extends AppCompatActivity {
         scoreText.setText(correctAnsCount + "/" + totalAnsCount + " " +
                 getString(R.string.correct_answers));
 
+        final AlertDialog tryAgainDialog = new AlertDialog.Builder(this)
+                .setMessage(R.string.try_again_dialog_message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }).setNegativeButton(android.R.string.no, null).create();
+
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setResult(RESULT_OK);
-                finish();
+                tryAgainDialog.show();
             }
         });
     }

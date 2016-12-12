@@ -42,4 +42,5 @@
     <string name="result_bad">Go read a book</string>
 
     <string name="try_again">Try again</string>
+    <string name="try_again_dialog_message">Reset and try again?</string>
 </resources>
