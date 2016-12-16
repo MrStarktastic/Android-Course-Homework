@@ -41,6 +41,9 @@ public class QuestionFragment extends Fragment implements TextWatcher {
         return fragment;
     }
 
+    /**
+     * Unlike an activity's onCreate method, here it's common to get the arguments and not deal with views.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +54,9 @@ public class QuestionFragment extends Fragment implements TextWatcher {
         }
     }
 
+    /**
+     * This is where the {@link Fragment}'s view is inflated (created).
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,10 +71,20 @@ public class QuestionFragment extends Fragment implements TextWatcher {
         return v;
     }
 
+    /**
+     * This method is called when this {@link Fragment} is attached to its parent activity.
+     *
+     * @param context The parent activity's context.
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        /**
+         * This is an example of how one can force a parent activity to implement a listener.
+         * Thus, we don't even need a setter method for the listener
+         * unlike buttons and lots of other widgets (Remember setOnClickListener?).
+         */
         if (context instanceof OnAnswerChangeListener)
             answerListener = (OnAnswerChangeListener) context;
         else throw new RuntimeException(context.toString() +
@@ -86,6 +102,9 @@ public class QuestionFragment extends Fragment implements TextWatcher {
 
     }
 
+    /**
+     * When the answer {@link EditText} is changed, the {@link OnAnswerChangeListener} is called.
+     */
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         if (answerListener != null)
@@ -99,6 +118,10 @@ public class QuestionFragment extends Fragment implements TextWatcher {
 
     }
 
+    /**
+     * This is a functional interface. I believe it's crucial to know how listeners are made
+     * and here lies the foundation for that.
+     */
     public interface OnAnswerChangeListener {
         void onAnswerChange(boolean isCorrect);
     }

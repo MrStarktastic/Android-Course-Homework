@@ -17,12 +17,33 @@ import android.widget.TextView;
 
 public class TriviaActivity extends AppCompatActivity
         implements View.OnClickListener, QuestionFragment.OnAnswerChangeListener {
+    /**
+     * This activity starts another activity and would like to get data back from it.
+     * A request code identifier helps with that. See below when starting the {@link ResultActivity}
+     * and inside the method onActivityResult.
+     */
     private static final int REQUEST_CODE_RESULT = 1;
 
+    /**
+     * This is the view which holds {@link QuestionFragment}s as pages.
+     */
     private ViewPager questionPager;
+
+    /**
+     * An adapter for our questionPager. Manages the content and initiates {@link Fragment}s when needed.
+     */
     private QuestionPagerAdapter questionAdapter;
+
+    /**
+     * The {@link TextView} displayed at the bottom of this activity (not inside the questionPager)
+     * which indicates the question/page's index.
+     */
     private TextView pageIndexText;
 
+    /**
+     * By default, this array is initialized with all of its elements as false.
+     * Changes when the user types a correct answer.
+     */
     private boolean[] correctAnswers;
 
     @Override
@@ -57,6 +78,10 @@ public class TriviaActivity extends AppCompatActivity
         });
 
         Resources res = getResources();
+        /**
+         * A {@link FragmentStatePagerAdapter} utilizes a {@link FragmentManager}
+         * to add fragments to the screen.
+         */
         questionAdapter = new QuestionPagerAdapter(getSupportFragmentManager(),
                 res.getStringArray(R.array.questions), res.getStringArray(R.array.answers));
         questionPager.setAdapter(questionAdapter);
@@ -69,6 +94,9 @@ public class TriviaActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
+        /**
+         * Both previous & next buttons manifest a cyclic behavior, hence modulo.
+         */
         switch (view.getId()) {
             case R.id.previous_button:
                 int index = questionPager.getCurrentItem() - 1;
@@ -82,6 +110,10 @@ public class TriviaActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * The action buttons at the top of the screen (on the {@link android.support.v7.app.ActionBar})
+     * have to be inflated here.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_trivia, menu);
@@ -91,6 +123,16 @@ public class TriviaActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_check_answers) {
+            /**
+             * The menu button at the top was selected, so the {@link ResultActivity} must start.
+             * We pass the amount of correct answers and also the total amount of questions.
+             *
+             * The activity is started but not with the regular startActivity method.
+             * Once, the user is finished with {@link ResultActivity}, we want {@link TriviaActivity}
+             * to know whether the user pressed on the "Try Again" button.
+             * So we use startActivityForResult and our REQUEST_CODE_RESULT will be later used
+             * in the onActivityResult method down below.
+             */
             Intent intent = new Intent(TriviaActivity.this, ResultActivity.class)
                     .putExtra(ResultActivity.EXTRA_CORRECT_ANS_COUNT, getCorrectAnswersCount())
                     .putExtra(ResultActivity.EXTRA_TOTAL_ANS_COUNT, correctAnswers.length);
@@ -104,6 +146,10 @@ public class TriviaActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /**
+         * The {@link ResultActivity} sets the resultCode to be RESULT_OK if the user wants
+         * to reset the trivia. RESULT_CANCELED is the default value.
+         */
         if (requestCode == REQUEST_CODE_RESULT && resultCode == RESULT_OK) { // Resets trivia
             questionPager.setAdapter(new QuestionPagerAdapter(getSupportFragmentManager(),
                     questionAdapter.questions, questionAdapter.answers));
@@ -117,6 +163,9 @@ public class TriviaActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * Counts the amount of "true" in the correctAnswers array.
+     */
     private int getCorrectAnswersCount() {
         int count = 0;
         for (boolean b : correctAnswers) if (b) ++count;
@@ -127,16 +176,31 @@ public class TriviaActivity extends AppCompatActivity
         pageIndexText.setText(position + 1 + "/" + questionAdapter.getCount());
     }
 
+    /**
+     * This method is called from a {@link Fragment} whenever the user modifies an answer.
+     *
+     * @param isCorrect True if the user's answer is correct, False otherwise.
+     */
     @Override
     public void onAnswerChange(boolean isCorrect) {
         correctAnswers[questionPager.getCurrentItem()] = isCorrect;
     }
 
+    /**
+     * This can be created in a separated file if you wish.
+     * <p>
+     * P.S. There's a difference between {@link FragmentStatePagerAdapter} and
+     * {@link android.support.v4.app.FragmentPagerAdapter}. Google it or talk to me if you'd like to know.
+     */
     private static final class QuestionPagerAdapter extends FragmentStatePagerAdapter {
+        /**
+         * Both of the string arrays have the same length. You are free to consider
+         * a different approach. A 2D array or a dedicated class, perhaps?
+         */
         private String[] questions, answers;
         private int count;
 
-        QuestionPagerAdapter(FragmentManager fm, String[] questions, String[] answers) {
+        public QuestionPagerAdapter(FragmentManager fm, String[] questions, String[] answers) {
             super(fm);
             this.questions = questions;
             this.answers = answers;

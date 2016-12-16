@@ -49,8 +49,8 @@ public class ResultActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        setResult(RESULT_OK);
-                        finish();
+                        setResult(RESULT_OK); // For onActivityResult of the parent activity
+                        finish(); // This is how we close the activity
                     }
                 }).setNegativeButton(android.R.string.no, null).create();
 
