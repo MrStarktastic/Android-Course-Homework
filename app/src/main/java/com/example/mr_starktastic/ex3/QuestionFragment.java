@@ -12,10 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class QuestionFragment extends Fragment implements TextWatcher {
+    private static final String ARG_POSITION = "position";
     private static final String ARG_QUESTION = "question";
-    private static final String ARG_ANSWER = "answer";
 
-    private String question, answer;
+    private int position;
+    private String question;
 
     private OnAnswerChangeListener answerListener;
 
@@ -28,14 +29,14 @@ public class QuestionFragment extends Fragment implements TextWatcher {
      * this fragment using the provided parameters.
      *
      * @param question Question string.
-     * @param answer   Correct answer string.
+     * @param position This fragment's position in the ViewPager.
      * @return A new instance of fragment QuestionFragment.
      */
-    public static QuestionFragment newInstance(String question, String answer) {
+    public static QuestionFragment newInstance(int position, String question) {
         QuestionFragment fragment = new QuestionFragment();
         Bundle args = new Bundle();
+        args.putInt(ARG_POSITION, position);
         args.putString(ARG_QUESTION, question);
-        args.putString(ARG_ANSWER, answer);
         fragment.setArguments(args);
 
         return fragment;
@@ -48,9 +49,11 @@ public class QuestionFragment extends Fragment implements TextWatcher {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            question = getArguments().getString(ARG_QUESTION);
-            answer = getArguments().getString(ARG_ANSWER);
+        Bundle args = getArguments();
+
+        if (args != null) {
+            position = args.getInt(ARG_POSITION);
+            question = args.getString(ARG_QUESTION);
         }
     }
 
@@ -108,9 +111,7 @@ public class QuestionFragment extends Fragment implements TextWatcher {
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         if (answerListener != null)
-            if (charSequence.length() != 0)
-                answerListener.onAnswerChange(answer.equalsIgnoreCase(charSequence.toString()));
-            else answerListener.onAnswerChange(false);
+            answerListener.onAnswerChange(position, charSequence.toString());
     }
 
     @Override
@@ -123,6 +124,6 @@ public class QuestionFragment extends Fragment implements TextWatcher {
      * and here lies the foundation for that.
      */
     public interface OnAnswerChangeListener {
-        void onAnswerChange(boolean isCorrect);
+        void onAnswerChange(int position, String answer);
     }
 }

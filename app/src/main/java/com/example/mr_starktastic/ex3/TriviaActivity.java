@@ -40,11 +40,7 @@ public class TriviaActivity extends AppCompatActivity
      */
     private TextView pageIndexText;
 
-    /**
-     * By default, this array is initialized with all of its elements as false.
-     * Changes when the user types a correct answer.
-     */
-    private boolean[] correctAnswers;
+    private String[] correctAnswers, userAnswers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +49,8 @@ public class TriviaActivity extends AppCompatActivity
 
         // The bottom toolbar has to be visible above the keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        setTitle("My Trivia");
 
         questionPager = (ViewPager) findViewById(R.id.pager);
         Button prevButton = (Button) findViewById(R.id.previous_button);
@@ -83,10 +81,11 @@ public class TriviaActivity extends AppCompatActivity
          * to add fragments to the screen.
          */
         questionAdapter = new QuestionPagerAdapter(getSupportFragmentManager(),
-                res.getStringArray(R.array.questions), res.getStringArray(R.array.answers));
+                res.getStringArray(R.array.questions));
         questionPager.setAdapter(questionAdapter);
         setQuestionIndexText(0);
-        correctAnswers = new boolean[questionAdapter.getCount()];
+        correctAnswers = res.getStringArray(R.array.answers);
+        userAnswers = new String[questionAdapter.getCount()];
 
         prevButton.setOnClickListener(this);
         nextButton.setOnClickListener(this);
@@ -128,14 +127,14 @@ public class TriviaActivity extends AppCompatActivity
              * We pass the amount of correct answers and also the total amount of questions.
              *
              * The activity is started but not with the regular startActivity method.
-             * Once, the user is finished with {@link ResultActivity}, we want {@link TriviaActivity}
+             * As the user is finished with {@link ResultActivity}, we want {@link TriviaActivity}
              * to know whether the user pressed on the "Try Again" button.
              * So we use startActivityForResult and our REQUEST_CODE_RESULT will be later used
              * in the onActivityResult method down below.
              */
             Intent intent = new Intent(TriviaActivity.this, ResultActivity.class)
                     .putExtra(ResultActivity.EXTRA_CORRECT_ANS_COUNT, getCorrectAnswersCount())
-                    .putExtra(ResultActivity.EXTRA_TOTAL_ANS_COUNT, correctAnswers.length);
+                    .putExtra(ResultActivity.EXTRA_TOTAL_ANS_COUNT, userAnswers.length);
             startActivityForResult(intent, REQUEST_CODE_RESULT);
 
             return true;
@@ -152,23 +151,31 @@ public class TriviaActivity extends AppCompatActivity
          */
         if (requestCode == REQUEST_CODE_RESULT && resultCode == RESULT_OK) { // Resets trivia
             questionPager.setAdapter(new QuestionPagerAdapter(getSupportFragmentManager(),
-                    questionAdapter.questions, questionAdapter.answers));
+                    questionAdapter.questions));
             questionPager.setCurrentItem(0);
             setQuestionIndexText(0);
 
-            for (int i = 0; i < correctAnswers.length; ++i)
-                correctAnswers[i] = false;
+            for (int i = 0; i < userAnswers.length; ++i)
+                userAnswers[i] = null;
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
-     * Counts the amount of "true" in the correctAnswers array.
+     * Counts the amount of correct answers.
      */
     private int getCorrectAnswersCount() {
         int count = 0;
-        for (boolean b : correctAnswers) if (b) ++count;
+
+        for (int i = 0; i < userAnswers.length; ++i) {
+            String userAns = userAnswers[i];
+
+            if (userAns != null && !userAns.isEmpty())
+                if (userAns.equalsIgnoreCase(correctAnswers[i]))
+                    ++count;
+        }
+
         return count;
     }
 
@@ -179,11 +186,11 @@ public class TriviaActivity extends AppCompatActivity
     /**
      * This method is called from a {@link Fragment} whenever the user modifies an answer.
      *
-     * @param isCorrect True if the user's answer is correct, False otherwise.
+     * @param answer The answer that the user has typed.
      */
     @Override
-    public void onAnswerChange(boolean isCorrect) {
-        correctAnswers[questionPager.getCurrentItem()] = isCorrect;
+    public void onAnswerChange(int position, String answer) {
+        userAnswers[position] = answer;
     }
 
     /**
@@ -197,19 +204,18 @@ public class TriviaActivity extends AppCompatActivity
          * Both of the string arrays have the same length. You are free to consider
          * a different approach. A 2D array or a dedicated class, perhaps?
          */
-        private String[] questions, answers;
+        private String[] questions;
         private int count;
 
-        public QuestionPagerAdapter(FragmentManager fm, String[] questions, String[] answers) {
+        QuestionPagerAdapter(FragmentManager fm, String[] questions) {
             super(fm);
             this.questions = questions;
-            this.answers = answers;
             count = questions.length;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return QuestionFragment.newInstance(questions[position], answers[position]);
+            return QuestionFragment.newInstance(position, questions[position]);
         }
 
         @Override
